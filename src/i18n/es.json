@@ -1,0 +1,28 @@
+{
+  "welcome": {
+    "header": {
+      "title": "Instalación de Halo Online"
+    },
+    "body": {
+      "installation": {
+        "title": "Ruta de instalación"
+      },
+      "language": {
+        "title": "Idioma"
+      },
+      "extras": {
+        "title": "Extras",
+        "checkboxs": {
+          "menu": "Crear acceso directo en el menú inicio",
+          "desktop": "Crear acceso directo en el escritorio",
+          "hardware": "Compartir especificaciones de hardware"
+        }
+      }
+    },
+    "footer": {
+      "installButton": "Iniciar instalación",
+      "requiredSpace": "Se requieren"
+    }
+  }
+
+}

@@ -1,0 +1,52 @@
+import { FC, useContext } from 'react';
+import { Box, Stack, Typography } from '@mui/material';
+import { IChecksItems } from './Extras.d';
+import { CheckBox } from '../../../../components/CheckBox';
+import { IMainContext, MainContext } from '../../../../contexts/main';
+
+
+export const Extras: FC = () => {
+  const { checks, setChecks } = useContext(MainContext) as IMainContext;
+
+  const handleOnChange = ( value: string, checked: boolean ) => {
+    setChecks( ( currentChecks: IChecksItems ) => {
+      return {
+        ...currentChecks,
+        [ value ]: checked
+      }
+    })
+  }
+
+  return (
+    <div>
+      <Typography fontSize={12} fontWeight="bold" component="h3" textTransform="uppercase" color="#fff" mb="5px">
+        Ruta de instalación
+      </Typography>
+
+      <Box ml="-2px">
+        <Stack spacing={0.5}>
+          <CheckBox
+            label="Crear acceso directo en el menú inicio"
+            value="menu"
+            onChange={ handleOnChange }
+            checked={ checks.menu }
+          />
+
+          <CheckBox
+            label="Crear acceso directo en el escritorio"
+            value="desktop"
+            onChange={ handleOnChange }
+            checked={ checks.desktop }
+          />
+
+          <CheckBox
+            label="Compartir especificaciones de hardware"
+            value="hardware"
+            onChange={ handleOnChange }
+            checked={ checks.hardware }
+          />
+        </Stack>
+      </Box>
+    </div>
+  )
+}
