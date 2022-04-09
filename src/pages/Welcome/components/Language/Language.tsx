@@ -1,25 +1,28 @@
 import { FC, useContext, useRef, useState } from 'react';
+import i18n from 'i18next';
 import { IconChevronDown, IconChevronUp } from '@tabler/icons';
 import { MenuSelect, IMenuSelectItem } from '../MenuSelect';
 import { Box, IconButton, Typography } from '@mui/material';
 import { IMainContext, MainContext } from '../../../../contexts/main';
 import { TLanguage } from './Language.d';
-
-const selectItems: IMenuSelectItem[] = [
-  {
-    label: 'Español',
-    value: 'es'
-  },
-  {
-    label: 'Ingles',
-    value: 'en'
-  }
-]
+import { useTranslation } from 'react-i18next';
 
 export const Language: FC = () => {
   const { language, setLanguage } = useContext(MainContext) as IMainContext;
+  const { t } = useTranslation();
   const [selectDisplay, setSelectDisplay] = useState<boolean>(false);
   const anchorRef = useRef<HTMLButtonElement>(null);
+
+  const selectItems: IMenuSelectItem[] = [
+    {
+      label: t('welcome.body.language.options.es'),
+      value: 'es'
+    },
+    {
+      label: t('welcome.body.language.options.en'),
+      value: 'en'
+    }
+  ]
 
   const itemSelected = selectItems.find( (item: IMenuSelectItem ) => item.value === language );
 
@@ -29,7 +32,9 @@ export const Language: FC = () => {
 
   const onSelectClose = ( item?: IMenuSelectItem ) => {
     if ( item ) {
-      setLanguage( item.value as TLanguage )
+      const newLng = item.value as TLanguage;
+      setLanguage( newLng );
+      i18n.changeLanguage( newLng );
     }
     setSelectDisplay(false)
   }
@@ -37,7 +42,7 @@ export const Language: FC = () => {
   return (
     <div>
       <Typography fontSize={12} fontWeight="bold" component="h3" mb="8px" textTransform="uppercase" color="#fff">
-        Idioma
+        { t('welcome.body.language.title') }
       </Typography>
 
       <Box

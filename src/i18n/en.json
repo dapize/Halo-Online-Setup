@@ -1,0 +1,31 @@
+{
+  "welcome": {
+    "header": {
+      "title": "Installation of Halo Online"
+    },
+    "body": {
+      "installation": {
+        "title": "Installation Path"
+      },
+      "language": {
+        "title": "Language",
+        "options": {
+          "es": "Spanish",
+          "en": "English"
+        }
+      },
+      "extras": {
+        "title": "Additional features",
+        "checkboxs": {
+          "menu": "Create shortcut in start menu",
+          "desktop": "Create desktop shortcut",
+          "hardware": "Share hardware specifications"
+        }
+      }
+    },
+    "footer": {
+      "installButton": "Start installation",
+      "requiredSpace": "Are required"
+    }
+  }
+}

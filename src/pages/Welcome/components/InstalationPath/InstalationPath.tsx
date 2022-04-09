@@ -4,9 +4,11 @@ import { IconFolder } from '@tabler/icons';
 import { open } from "@tauri-apps/api/dialog";
 import { dataDir, join } from '@tauri-apps/api/path';
 import { IMainContext, MainContext } from '../../../../contexts/main';
+import { useTranslation } from 'react-i18next';
 
 export const InstalationPath: FC = () => {
   const { installationPath, setInstallationPath } = useContext(MainContext) as IMainContext;
+  const { t } = useTranslation();
 
   const getFullPath = async ( newPath: string ) => await join(newPath, 'Halo Online');
 
@@ -36,7 +38,7 @@ export const InstalationPath: FC = () => {
   return (
     <div>
       <Typography fontSize={12} fontWeight="bold" component="h3" mb="8px" textTransform="uppercase" color="#fff">
-        Ruta de instalación
+        { t('welcome.body.installation.title')}
       </Typography>
 
       <Box
@@ -86,7 +88,7 @@ export const InstalationPath: FC = () => {
             }
           }}
         >
-          <IconButton aria-label="Elegir carpeta de instalación" color="inherit">
+          <IconButton color="inherit">
             <IconFolder />
           </IconButton>
         </Box>

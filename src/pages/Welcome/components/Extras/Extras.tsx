@@ -3,10 +3,12 @@ import { Box, Stack, Typography } from '@mui/material';
 import { IChecksItems } from './Extras.d';
 import { CheckBox } from '../../../../components/CheckBox';
 import { IMainContext, MainContext } from '../../../../contexts/main';
+import { useTranslation } from 'react-i18next';
 
 
 export const Extras: FC = () => {
   const { checks, setChecks } = useContext(MainContext) as IMainContext;
+  const { t } = useTranslation();
 
   const handleOnChange = ( value: string, checked: boolean ) => {
     setChecks( ( currentChecks: IChecksItems ) => {
@@ -20,27 +22,27 @@ export const Extras: FC = () => {
   return (
     <div>
       <Typography fontSize={12} fontWeight="bold" component="h3" textTransform="uppercase" color="#fff" mb="5px">
-        Ruta de instalación
+        { t('welcome.body.extras.title') }
       </Typography>
 
       <Box ml="-2px">
         <Stack spacing={0.5}>
           <CheckBox
-            label="Crear acceso directo en el menú inicio"
+            label={t('welcome.body.extras.checkboxs.menu')}
             value="menu"
             onChange={ handleOnChange }
             checked={ checks.menu }
           />
 
           <CheckBox
-            label="Crear acceso directo en el escritorio"
+            label={t('welcome.body.extras.checkboxs.desktop')}
             value="desktop"
             onChange={ handleOnChange }
             checked={ checks.desktop }
           />
 
           <CheckBox
-            label="Compartir especificaciones de hardware"
+            label={t('welcome.body.extras.checkboxs.hardware')}
             value="hardware"
             onChange={ handleOnChange }
             checked={ checks.hardware }

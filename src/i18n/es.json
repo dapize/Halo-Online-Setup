@@ -8,7 +8,11 @@
         "title": "Ruta de instalación"
       },
       "language": {
-        "title": "Idioma"
+        "title": "Idioma",
+        "options": {
+          "es": "Español",
+          "en": "Ingles"
+        }
       },
       "extras": {
         "title": "Extras",
@@ -24,5 +28,4 @@
       "requiredSpace": "Se requieren"
     }
   }
-
 }
