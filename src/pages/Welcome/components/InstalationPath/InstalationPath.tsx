@@ -12,18 +12,13 @@ export const InstalationPath: FC = () => {
 
   const getFullPath = async ( newPath: string ) => await join(newPath, 'Halo Online');
 
-  const pathInstallationChange = async ( path: string ) => {
-    const newPath = await getFullPath( path );
-    setInstallationPath( newPath );
-  }
-
   const handleClick = async () => {
-    const pathSelected = await open({
+    const chosenFolder = await open({
       directory: true
     });
-    if ( pathSelected ) {
-      setInstallationPath( pathSelected as string )
-      pathInstallationChange( pathSelected as string )
+    if ( chosenFolder ) {
+      const newPath = await getFullPath( chosenFolder as string );
+      setInstallationPath( newPath );
     }
   }
 

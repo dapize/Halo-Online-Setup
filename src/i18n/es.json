@@ -27,5 +27,10 @@
       "installButton": "Iniciar instalación",
       "requiredSpace": "Se requieren"
     }
+  },
+  "installing": {
+    "footer": {
+      "title": "Instalando..."
+    }
   }
 }

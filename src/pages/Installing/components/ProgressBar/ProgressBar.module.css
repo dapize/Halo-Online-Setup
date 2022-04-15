@@ -1,0 +1,26 @@
+@keyframes bgBar-Animation {
+  0% {
+    background-position: 0 0;
+  }
+
+  100% {
+    background-position: 60px 0;
+  }
+}
+
+.bgBar {
+  box-shadow: 0 1px 5px #000 inset;
+  background-size: 30px 30px;
+  background-image: linear-gradient(135deg,
+      rgba(255, 255, 255, .15) 25%,
+      transparent 25%,
+      transparent 50%,
+      rgba(255, 255, 255, .15) 50%,
+      rgba(255, 255, 255, .15) 75%,
+      transparent 75%,
+      transparent);
+  animation: bgBar-Animation 0.6s linear infinite;
+  animation-duration: 1.25s;
+  animation-direction: reverse;
+  opacity: 0.25;
+}

@@ -1,18 +1,21 @@
-import { FC, ChangeEvent } from 'react'
-import { ICheckBox } from './CheckBox.d';
-
-import FormGroup from '@mui/material/FormGroup';
+import { FC, ChangeEvent, useState } from 'react'
 import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
+import { Box } from '@mui/material';
+import { ICheckBox } from './CheckBox.d';
 
 
 export const CheckBox: FC<ICheckBox> = ( { label, checked, onChange, value }) => {
+  const [checkedState, setCheckedState] = useState<boolean>(checked !== undefined ? checked : false)
+
   const onChangeHandle = ( event: ChangeEvent<HTMLInputElement>) => {
-    onChange(value, event.target.checked)
+    const newChecked = event.target.checked;
+    onChange(value, newChecked)
+    setCheckedState( newChecked )
   }
 
   return (
-    <FormGroup>
+    <Box display="flex" justifyContent="flex-start" alignItems="center">
       <FormControlLabel
         control={
           <Checkbox
@@ -22,19 +25,21 @@ export const CheckBox: FC<ICheckBox> = ( { label, checked, onChange, value }) =>
                 padding: '0 4px 0 0'
               }
             }}
-            defaultChecked={ checked }
+            checked={ checkedState }
             onChange={ onChangeHandle }
           />
         }
         label={label}
         sx={{
           color: 'rgba(255,255,255, 0.85)',
-          userSelect: 'none',
           '&.MuiFormControlLabel-root': {
-            marginLeft: 0
+            marginLeft: 0,
+            marginRight: 0,
+            width: 'auto',
+            display: 'flex'
           }
         }}
       />
-    </FormGroup>
+    </Box>
   )
 }
