@@ -1,25 +1,18 @@
 import { FC, useContext, useEffect } from 'react';
 import { Box, IconButton, Typography } from '@mui/material';
 import { IconFolder } from '@tabler/icons';
-import { open } from "@tauri-apps/api/dialog";
-import { dataDir, join } from '@tauri-apps/api/path';
+import { dataDir } from '@tauri-apps/api/path';
 import { IMainContext, MainContext } from '../../../../contexts/main';
 import { useTranslation } from 'react-i18next';
+import { chooseInstallationPath, getFullPath } from '../../../../helpers/chooseInstallationPath';
 
 export const InstalationPath: FC = () => {
   const { installationPath, setInstallationPath } = useContext(MainContext) as IMainContext;
   const { t } = useTranslation();
 
-  const getFullPath = async ( newPath: string ) => await join(newPath, 'Halo Online');
-
   const handleClick = async () => {
-    const chosenFolder = await open({
-      directory: true
-    });
-    if ( chosenFolder ) {
-      const newPath = await getFullPath( chosenFolder as string );
-      setInstallationPath( newPath );
-    }
+    const newInstallationPath = await chooseInstallationPath();
+    if ( newInstallationPath )  setInstallationPath( newInstallationPath );
   }
 
   useEffect(() => {

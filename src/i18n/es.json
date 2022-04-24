@@ -31,6 +31,21 @@
   "installing": {
     "footer": {
       "title": "Instalando..."
+    },
+    "errors": {
+      "mainFolderAlreadyExists": "La carpeta principal (Halo Online) para la instalación del juego yá existe en la ruta:",
+      "removingMainFolder": "No fué posible eliminar la carpeta principal (Halo Online) para la reinstalación del juego.",
+      "creatingInstallationFolder": "Error creando el folder de instalación"
+    },
+    "dialogConfirm": {
+      "title": "Carpeta Existente",
+      "description": "La carpeta principal (Halo Online) ya existe en la ruta de instalación definida.",
+      "question": "¿Quieres sobre escribirla o elegir otra carpeta?",
+      "buttons": {
+        "overwrite": "Sobreescribirla",
+        "chooseOther": "Elegir otra",
+        "cancel": "Cancelar"
+      }
     }
   }
 }

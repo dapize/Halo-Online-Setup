@@ -16,7 +16,7 @@ export const Footer = () => {
   }
 
   const goNext = () => {
-    nav('/installing', { replace: true });
+    nav('/result', { replace: true });
   }
 
   return (

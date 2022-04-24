@@ -31,6 +31,21 @@
   "installing": {
     "footer": {
       "title": "Installing..."
+    },
+    "errors": {
+      "mainFolderAlreadyExists": "The main folder (Halo Online) for the installation of the game already exists in the path:",
+      "removingMainFolder": "Was not possible delete the main folder (Halo Online) to reinstall the game.",
+      "creatingInstallationFolder": "Error creating the installation folder"
+    },
+    "dialogConfirm": {
+      "title": "Existing Folder",
+      "description": "The main folder (Halo Online) already exists in the installation path defined",
+      "question": "Do you want to overwrite it or choose other?",
+      "buttons": {
+        "overwrite": "Overwrite",
+        "chooseOther": "Choose other",
+        "cancel": "Cancel"
+      }
     }
   }
 }

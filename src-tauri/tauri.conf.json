@@ -70,6 +70,17 @@
         "all": true,
         "request": true,
         "scope": ["https://**", "http://**"]
+      },
+      "shell": {
+        "all": true,
+        "execute": true,
+        "scope": [
+          {
+            "name": "curl",
+            "cmd": "curl",
+            "args": true
+          }
+        ]
       }
     },
     "windows": [
