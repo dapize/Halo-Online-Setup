@@ -16,7 +16,7 @@ export const Footer = () => {
   }
 
   const goNext = () => {
-    nav('/result', { replace: true });
+    nav('/installing', { replace: true });
   }
 
   return (
@@ -24,7 +24,7 @@ export const Footer = () => {
       <Box display="flex" justifyContent="center" alignItems="center">
         <IconDownload size={16} color="#6CDB00"/>
         <Typography color="#797474" { ...typoStyles }>{ t('welcome.footer.requiredSpace')}</Typography>
-        <Typography color="#C0C0C0" { ...typoStyles }>2.05G</Typography>
+        <Typography color="#C0C0C0" { ...typoStyles }>2.35G</Typography>
       </Box>
 
       <Button variant="contained" size="large" sx={{ minHeight: 44, borderRadius: '2px' }}>

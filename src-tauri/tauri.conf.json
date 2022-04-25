@@ -81,6 +81,10 @@
             "args": true
           }
         ]
+      },
+      "process": {
+        "exit": true,
+        "relaunch": true
       }
     },
     "windows": [

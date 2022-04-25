@@ -12,7 +12,8 @@ import { ProgressBar } from './components/ProgressBar';
 
 import { IMainContext, MainContext } from '../../contexts/main';
 import { Downloader } from '../../helpers/Downloader';
-import { DialogConfirm, TOption } from './components/DialogConfirm';
+import { DialogMainFolder, TOption as TOptionMainFolder } from './components/DialogMainFolder';
+import { DialogRelaunch, TOption as TOptionRelaunch } from './components/DialogRelaunch';
 
 import { IResponse } from './Installing.d';
 
@@ -23,6 +24,7 @@ import map4 from '../../assets/installing/map04.jpg';
 import map5 from '../../assets/installing/map05.jpg';
 import map6 from '../../assets/installing/map06.jpg';
 import { chooseInstallationPath } from '../../helpers/chooseInstallationPath';
+import { relaunch } from '@tauri-apps/api/process';
 
 const galleryItems = [ map1, map2, map3, map4, map5, map6 ];
 
@@ -34,20 +36,20 @@ export const Installing = () => {
   const [ percentageProgress, setPercentageProgress ] = useState<number>(0);
   const { installationPath, language, setInstallationPath } = useContext(MainContext) as IMainContext;
   const uniqueReques = useRef<boolean>(false);
-  const [dialogDisplay, setDialogDisplay] = useState<boolean>(true);
+  const [dialogMainFolderDisplay, setDialogMainFolderDisplay] = useState<boolean>(false);
+  const chooseOtherFolder = useRef<boolean>(false);
+  const [dialogRelaunchDisplay, setDialogRelaunchDisplay] = useState<boolean>(false);
 
   const reqFilesList = useCallback( async () => {
     try {
       const getFilesList: Response<IResponse> = await fetch(`http://localhost:8000/files?language=${language}`);
-      console.log('new installationPath: ', installationPath);
       const getFiles = new Downloader( getFilesList.data.list, installationPath );
       getFiles.on('error', ( err: unknown ) => {
-        console.log('ocurriò un error: ', err );
+        setDialogRelaunchDisplay(true)
       });
       getFiles.on('finish', ( err: unknown ) => {
-        console.log('termino de descargar');
-        if ( err ) {
-          console.log('finalizò pero con error');
+        if ( !err ) {
+          nav('/result', { replace: true, state: { type: 'success' }});
         }
       });
       getFiles.on('progress', ( percentage: number ) => {
@@ -55,9 +57,9 @@ export const Installing = () => {
       });
 
     } catch ( err ) {
-      console.log('error en la consulta inicial');
+      setDialogRelaunchDisplay(true)
     }
-  }, [ language, installationPath ]);
+  }, [ language, installationPath, nav ]);
 
   const mainFolderChecker = useCallback(
     async (): Promise<boolean> => {
@@ -79,7 +81,7 @@ export const Installing = () => {
           await createDir( installationPath );
           reqFilesList();
         } else {
-          setDialogDisplay( true );
+          setDialogMainFolderDisplay( true );
         }
       } catch ( err ) {
         enqueueSnackbar(t('installing.errors.creatingInstallationFolder'), { variant: 'error' });
@@ -88,8 +90,8 @@ export const Installing = () => {
     [ installationPath, mainFolderChecker, reqFilesList, enqueueSnackbar, t ],
   );
 
-  const handleCloseDialog = async ( option: TOption ) => {
-    setDialogDisplay( false );
+  const handleCloseDialogMainFolder = async ( option: TOptionMainFolder ) => {
+    setDialogMainFolderDisplay( false );
     switch ( option ) {
       case 'overwrite':
         try {
@@ -102,23 +104,40 @@ export const Installing = () => {
 
       case 'other':
         const newInstallationPath = await chooseInstallationPath();
-        if ( newInstallationPath )  setInstallationPath( newInstallationPath );
-        initInstallation();
+        if ( newInstallationPath ) {
+          setInstallationPath( newInstallationPath );
+          chooseOtherFolder.current = true;
+        }
         break;
 
       case 'cancel':
-        nav('/final', { replace: true, state: { } });
-        console.log('ir a la pàgina de finalizar');
+        nav('/result', { replace: true, state: { type: 'cancelled' }});
         break;
     }
   }
 
+  const handleCloseDialogRelaunch = async ( option: TOptionRelaunch ) => {
+    setDialogRelaunchDisplay(false);
+    if ( option === 'reinit') {
+      await relaunch()
+    } else {
+      nav('/result', { replace: true, state: { type: 'cancelled' }});
+    }
+  }
+
+  useEffect(() => {
+    if ( uniqueReques.current && chooseOtherFolder.current) {
+      chooseOtherFolder.current = false;
+      initInstallation();
+    }
+  }, [ installationPath, initInstallation ])
+
   useEffect(() => {
     if ( !uniqueReques.current ) {
       uniqueReques.current = true;
-      //initInstallation();
+      initInstallation();
     };
-  }, [ ])
+  }, [ initInstallation ]);
 
   return (
     <>
@@ -131,7 +150,7 @@ export const Installing = () => {
         <Box position="absolute" bottom={0} left={0} width="100%" zIndex={15}>
           <Box display="flex" justifyContent="space-between" alignItems="center" px="7px" mb="7px">
             <Typography fontSize={10} lineHeight="12px" color="#fff" component="span" onClick={reqFilesList}>
-              { t('installing.footer.title') }
+              { t('installing.footer.title') } { percentageProgress }%
             </Typography>
             <Nav
               items={ galleryItems.length }
@@ -143,9 +162,14 @@ export const Installing = () => {
         </Box>
       </Box>
 
-      <DialogConfirm
-        display={dialogDisplay}
-        response={handleCloseDialog}
+      <DialogMainFolder
+        display={dialogMainFolderDisplay}
+        response={handleCloseDialogMainFolder}
+      />
+
+      <DialogRelaunch
+        display={dialogRelaunchDisplay}
+        response={handleCloseDialogRelaunch}
       />
     </>
   )

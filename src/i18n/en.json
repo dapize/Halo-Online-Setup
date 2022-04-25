@@ -30,22 +30,47 @@
   },
   "installing": {
     "footer": {
-      "title": "Installing..."
+      "title": {
+        "gettingFiles": "Getting list of Files...",
+        "installing": "Installing..."
+      }
     },
     "errors": {
       "mainFolderAlreadyExists": "The main folder (Halo Online) for the installation of the game already exists in the path:",
       "removingMainFolder": "Was not possible delete the main folder (Halo Online) to reinstall the game.",
       "creatingInstallationFolder": "Error creating the installation folder"
     },
-    "dialogConfirm": {
-      "title": "Existing Folder",
-      "description": "The main folder (Halo Online) already exists in the installation path defined",
-      "question": "Do you want to overwrite it or choose other?",
-      "buttons": {
-        "overwrite": "Overwrite",
-        "chooseOther": "Choose other",
-        "cancel": "Cancel"
+    "dialogs": {
+      "mainFolder": {
+        "title": "Existing Folder",
+        "description": "The main folder (Halo Online) already exists in the installation path defined",
+        "question": "Do you want to overwrite it or choose other?",
+        "buttons": {
+          "overwrite": "Overwrite",
+          "chooseOther": "Choose other",
+          "cancel": "Cancel"
+        }
+      },
+      "relaunch": {
+        "title": "Oh no!",
+        "description": "Was not possible get the neccesary files for the installation, check your internet connection",
+        "question": "What you want to do?",
+        "buttons": {
+          "relaunch": "Relaunch",
+          "cancel": "Cancel"
+        }
       }
     }
+  },
+  "result": {
+    "title": {
+      "success": "¡Installation finish successfully!",
+      "cancelled": "Installation cancelled :("
+    },
+    "finishButton": {
+      "success": "Finish",
+      "cancelled": "Close"
+    },
+    "initCheckbox": "Launch Halo Online"
   }
 }

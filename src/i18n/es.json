@@ -37,15 +37,37 @@
       "removingMainFolder": "No fué posible eliminar la carpeta principal (Halo Online) para la reinstalación del juego.",
       "creatingInstallationFolder": "Error creando el folder de instalación"
     },
-    "dialogConfirm": {
-      "title": "Carpeta Existente",
-      "description": "La carpeta principal (Halo Online) ya existe en la ruta de instalación definida.",
-      "question": "¿Quieres sobre escribirla o elegir otra carpeta?",
-      "buttons": {
-        "overwrite": "Sobreescribirla",
-        "chooseOther": "Elegir otra",
-        "cancel": "Cancelar"
+    "dialogs": {
+      "mainFolder": {
+        "title": "Carpeta Existente",
+        "description": "La carpeta principal (Halo Online) ya existe en la ruta de instalación definida.",
+        "question": "¿Quieres sobre escribirla o elegir otra carpeta?",
+        "buttons": {
+          "overwrite": "Sobre escribirla",
+          "chooseOther": "Elegir otra carpeta",
+          "cancel": "Cancelar"
+        }
+      },
+      "relaunch": {
+        "title": "¡Oh rayos!",
+        "description": "No fué posible obtener los archivos necesarios para la instalación, verifica tu conección de internet",
+        "question": "¿Qué quieres hacer?",
+        "buttons": {
+          "relaunch": "Reiniciar",
+          "cancel": "Cancelar"
+        }
       }
     }
+  },
+  "result": {
+    "title": {
+      "success": "¡Instalación completada con éxito!",
+      "cancelled": "Instalación cancelada :("
+    },
+    "finishButton": {
+      "success": "Finalizar",
+      "cancelled": "Cerrar"
+    },
+    "initCheckbox": "Iniciar Halo Online"
   }
 }

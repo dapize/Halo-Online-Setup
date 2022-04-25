@@ -71,7 +71,7 @@ export class Downloader {
 
   private setProgress () {
     this.processed += 1;
-    const progress = ( this.processed * 100 ) / this.urls.length;
+    const progress = Math.floor((( this.processed * 100 ) / this.urls.length ) * 100) / 100;
     this.subscribers.progress.forEach( (fn: TFnProgress ) => fn( progress ));
     if ( progress >= 100 ) this.finished( false )
   }
