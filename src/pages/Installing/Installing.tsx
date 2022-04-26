@@ -17,16 +17,8 @@ import { DialogRelaunch, TOption as TOptionRelaunch } from './components/DialogR
 
 import { IResponse } from './Installing.d';
 
-import map1 from '../../assets/installing/map01.jpg';
-import map2 from '../../assets/installing/map02.jpg';
-import map3 from '../../assets/installing/map03.jpg';
-import map4 from '../../assets/installing/map04.jpg';
-import map5 from '../../assets/installing/map05.jpg';
-import map6 from '../../assets/installing/map06.jpg';
 import { chooseInstallationPath } from '../../helpers/chooseInstallationPath';
 import { relaunch } from '@tauri-apps/api/process';
-
-const galleryItems = [ map1, map2, map3, map4, map5, map6 ];
 
 export const Installing = () => {
   const { t } = useTranslation();
@@ -85,6 +77,7 @@ export const Installing = () => {
         }
       } catch ( err ) {
         enqueueSnackbar(t('installing.errors.creatingInstallationFolder'), { variant: 'error' });
+        console.log(err);
       }
     },
     [ installationPath, mainFolderChecker, reqFilesList, enqueueSnackbar, t ],
@@ -142,18 +135,15 @@ export const Installing = () => {
   return (
     <>
       <Box width="100%" height="518px">
-        <Gallery
-          items={ galleryItems }
-          active={ itemActive }
-        />
+        <Gallery active={ itemActive }/>
 
         <Box position="absolute" bottom={0} left={0} width="100%" zIndex={15}>
           <Box display="flex" justifyContent="space-between" alignItems="center" px="7px" mb="7px">
-            <Typography fontSize={10} lineHeight="12px" color="#fff" component="span" onClick={reqFilesList}>
+            <Typography fontSize={10} lineHeight="12px" color="#fff" component="span">
               { t('installing.footer.title') } { percentageProgress }%
             </Typography>
             <Nav
-              items={ galleryItems.length }
+              items={ 12 }
               active={ itemActive }
               changedTo={ setItemActive }
             />

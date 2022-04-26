@@ -7,6 +7,6 @@ export interface IMainContext {
   setInstallationPath: Dispatch<SetStateAction<string>>;
   language: TLanguage;
   setLanguage: Dispatch<SetStateAction<TLanguage>>;
-  checks: IChecksItems;
-  setChecks: Dispatch<SetStateAction<IChecksItems>>;
+  extraChecks: IChecksItems;
+  setExtraChecks: Dispatch<SetStateAction<IChecksItems>>;
 }

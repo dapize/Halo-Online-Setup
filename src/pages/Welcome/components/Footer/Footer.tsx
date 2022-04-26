@@ -1,11 +1,13 @@
 import { Box, Button, Typography } from '@mui/material';
 import { IconDownload } from '@tabler/icons';
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 export const Footer = () => {
   const { t } = useTranslation();
   let nav = useNavigate();
+  const [disabledButtonInstall, setDisabledButtonInstall] = useState<boolean>(false);
 
   const typoStyles = {
     fontWeight: "bold",
@@ -16,6 +18,7 @@ export const Footer = () => {
   }
 
   const goNext = () => {
+    setDisabledButtonInstall(true);
     nav('/installing', { replace: true });
   }
 
@@ -27,7 +30,7 @@ export const Footer = () => {
         <Typography color="#C0C0C0" { ...typoStyles }>2.35G</Typography>
       </Box>
 
-      <Button variant="contained" size="large" sx={{ minHeight: 44, borderRadius: '2px' }}>
+      <Button variant="contained" size="large" sx={{ minHeight: 44, borderRadius: '2px' }} disabled={disabledButtonInstall}>
         <Typography
           component="span"
           fontSize={15}

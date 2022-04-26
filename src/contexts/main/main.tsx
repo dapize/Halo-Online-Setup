@@ -8,7 +8,7 @@ export const MainContext = createContext<IMainContext | null>(null);
 export const MainProvider: FC<ReactNode> = ( { children }) => {
   const [installationPath, setInstallationPath] = useState<string>('loading...');
   const [language, setLanguage] = useState<TLanguage>('es');
-  const [checks, setChecks] = useState<IChecksItems>({
+  const [extraChecks, setExtraChecks] = useState<IChecksItems>({
     menu: true,
     desktop: true,
     hardware: true
@@ -19,8 +19,8 @@ export const MainProvider: FC<ReactNode> = ( { children }) => {
     setInstallationPath,
     language,
     setLanguage,
-    checks,
-    setChecks
+    extraChecks,
+    setExtraChecks
   }
 
   return (

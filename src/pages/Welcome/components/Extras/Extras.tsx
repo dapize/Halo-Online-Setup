@@ -7,11 +7,11 @@ import { useTranslation } from 'react-i18next';
 
 
 export const Extras: FC = () => {
-  const { checks, setChecks } = useContext(MainContext) as IMainContext;
+  const { extraChecks, setExtraChecks } = useContext(MainContext) as IMainContext;
   const { t } = useTranslation();
 
   const handleOnChange = ( value: string, checked: boolean ) => {
-    setChecks( ( currentChecks: IChecksItems ) => {
+    setExtraChecks( ( currentChecks: IChecksItems ) => {
       return {
         ...currentChecks,
         [ value ]: checked
@@ -31,21 +31,21 @@ export const Extras: FC = () => {
             label={t('welcome.body.extras.checkboxs.menu')}
             value="menu"
             onChange={ handleOnChange }
-            checked={ checks.menu }
+            checked={ extraChecks.menu }
           />
 
           <CheckBox
             label={t('welcome.body.extras.checkboxs.desktop')}
             value="desktop"
             onChange={ handleOnChange }
-            checked={ checks.desktop }
+            checked={ extraChecks.desktop }
           />
 
           <CheckBox
             label={t('welcome.body.extras.checkboxs.hardware')}
             value="hardware"
             onChange={ handleOnChange }
-            checked={ checks.hardware }
+            checked={ extraChecks.hardware }
           />
         </Stack>
       </Box>

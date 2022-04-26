@@ -1,25 +1,30 @@
-import { useContext, useEffect, useState } from 'react';
+import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box, Button, Typography } from '@mui/material';
-import { CheckBox } from '../../components/CheckBox';
 
+import { open } from '@tauri-apps/api/shell';
+import { exit } from '@tauri-apps/api/process';
+import { join } from '@tauri-apps/api/path';
+
+import { CheckBox } from '../../components/CheckBox';
 import Background from '../../assets/result/background.png';
 import Logo from '../../assets/logo.png';
-import { IData, IStateLoc } from './Result.d';
-import { exit } from '@tauri-apps/api/process';
+
 import { IMainContext, MainContext } from '../../contexts/main';
-import { open } from '@tauri-apps/api/shell';
-import { join } from '@tauri-apps/api/path';
+import { shortcutCreator } from '../../helpers/shortcutCreator';
+
+import { IData, IStateLoc } from './Result.d';
 
 export const Result = () => {
   const { t } = useTranslation();
   const { state } = useLocation();
-  const { installationPath } = useContext(MainContext) as IMainContext;
+  const { installationPath, extraChecks } = useContext(MainContext) as IMainContext;
   const [data, setData] = useState<IData>({ title: '', initCheckbox: '', finishButton: '' });
   const [initCheckboxState, setInitCheckboxState] = useState<boolean>(true);
   const stateType = (state as IStateLoc).type;
   const [displayInitCheckbox, setDisplayInitCheckbox] = useState<boolean>(true);
+  const shortcutsCreated = useRef<boolean>(false);
 
   const onClickHandleClose = async () => {
     if ( stateType === 'cancelled' ) {
@@ -33,13 +38,34 @@ export const Result = () => {
     }
   }
 
+  const createShortcuts = useCallback(
+    async () => {
+      const { menu, desktop } = extraChecks;
+      const finalPath = await join( installationPath, 'eldorado.exe' )
+      if ( desktop ) {
+        await shortcutCreator( 'Halo Online', finalPath, 'desktop' );
+      }
+      if ( menu ) {
+        await shortcutCreator( 'Halo Online', finalPath, 'startmenu', 'Halo Online' );
+      }
+    },
+    [ extraChecks, installationPath ],
+  )
+
   useEffect(() => {
     if ( stateType === 'success' ) {
       setData({
         title: t('result.title.success'),
         initCheckbox: t('result.initCheckbox'),
         finishButton: t('result.finishButton.success'),
-      })
+      });
+
+      // creating shortcuts and more
+      if ( !shortcutsCreated.current ) {
+        shortcutsCreated.current = true;
+        createShortcuts();
+      }
+
     } else if ( stateType === 'cancelled' ) {
       setDisplayInitCheckbox(false);
       setData({
@@ -48,7 +74,7 @@ export const Result = () => {
         finishButton: t('result.finishButton.cancelled'),
       })
     }
-  }, [ stateType, t ])
+  }, [ stateType, t, createShortcuts ])
 
   return (
     <Box

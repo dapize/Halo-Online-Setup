@@ -15,7 +15,7 @@ export const Nav: FC<INav> = ({ active, items, changedTo }) => {
     const tOut = setInterval(() => {
       setCurrentActive(( current: number ) => {
         const nextToActive = current + 1;
-        const finalNewCurrent = nextToActive > 5 ? 0 : nextToActive;
+        const finalNewCurrent = nextToActive > ( items - 1 ) ? 0 : nextToActive;
         changedTo( finalNewCurrent )
         return finalNewCurrent;
       })

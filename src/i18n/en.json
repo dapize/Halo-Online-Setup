@@ -30,10 +30,7 @@
   },
   "installing": {
     "footer": {
-      "title": {
-        "gettingFiles": "Getting list of Files...",
-        "installing": "Installing..."
-      }
+      "title": "Installing..."
     },
     "errors": {
       "mainFolderAlreadyExists": "The main folder (Halo Online) for the installation of the game already exists in the path:",

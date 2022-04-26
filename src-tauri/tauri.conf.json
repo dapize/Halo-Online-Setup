@@ -1,6 +1,6 @@
 {
   "package": {
-    "productName": "setup",
+    "productName": "Halo Online Setup",
     "version": "0.1.0"
   },
   "build": {
@@ -51,7 +51,15 @@
     "allowlist": {
       "fs": {
         "all": true,
-        "scope": ["$DATA/**"]
+        "readFile": true,
+        "writeFile": true,
+        "readDir": true,
+        "copyFile": true,
+        "createDir": true,
+        "removeDir": true,
+        "removeFile": true,
+        "renameFile": true,
+        "scope": ["$DATA/**", "$TEMP/**", "$DATA/Microsoft/Windows/Start Menu"]
       },
       "protocol": {
         "asset": true,
@@ -79,12 +87,20 @@
             "name": "curl",
             "cmd": "curl",
             "args": true
+          },
+          {
+            "name": "wscript",
+            "cmd": "wscript",
+            "args": true
           }
         ]
       },
       "process": {
         "exit": true,
         "relaunch": true
+      },
+      "os": {
+        "all": true
       }
     },
     "windows": [
