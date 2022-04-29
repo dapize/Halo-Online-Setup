@@ -1,24 +1,27 @@
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Box, Typography } from '@mui/material'
 import { useSnackbar } from 'notistack';
 import { useTranslation } from 'react-i18next';
+import { Box, Typography } from '@mui/material'
 import { fetch, Response } from '@tauri-apps/api/http';
-import { createDir, readDir, removeDir } from '@tauri-apps/api/fs';
+import { createDir, removeDir } from '@tauri-apps/api/fs';
+import { relaunch } from '@tauri-apps/api/process';
+
+import { Downloader } from '@helpers/Downloader';
+import { chooseInstallationPath } from '@helpers/chooseInstallationPath';
+
+import { IMainContext, MainContext } from '@contexts/main';
+import { ConfirmationDialog, IButton } from '@components/ConfirmationDialog';
 
 import { Gallery } from './components/Gallery'
 import { Nav } from './components/Nav';
 import { ProgressBar } from './components/ProgressBar';
 
-import { IMainContext, MainContext } from '../../contexts/main';
-import { Downloader } from '../../helpers/Downloader';
 import { DialogMainFolder, TOption as TOptionMainFolder } from './components/DialogMainFolder';
-import { DialogRelaunch, TOption as TOptionRelaunch } from './components/DialogRelaunch';
 
 import { IResponse } from './Installing.d';
+import { mainFolderChecker } from './helpers/mainFolderChecker';
 
-import { chooseInstallationPath } from '../../helpers/chooseInstallationPath';
-import { relaunch } from '@tauri-apps/api/process';
 
 export const Installing = () => {
   const { t } = useTranslation();
@@ -30,7 +33,23 @@ export const Installing = () => {
   const uniqueReques = useRef<boolean>(false);
   const [dialogMainFolderDisplay, setDialogMainFolderDisplay] = useState<boolean>(false);
   const chooseOtherFolder = useRef<boolean>(false);
+
   const [dialogRelaunchDisplay, setDialogRelaunchDisplay] = useState<boolean>(false);
+  const dialogRelaunchButtons: IButton[] = [
+    {
+      label: t('installing.dialogs.relaunch.buttons.cancel'),
+      action: () => {
+        setDialogRelaunchDisplay(false);
+        nav('/result', { replace: true, state: { type: 'cancelled' }});
+      }
+    },
+    {
+      label: t('installing.dialogs.relaunch.buttons.relaunch'),
+      action: async () => await relaunch(),
+      variant: 'contained',
+      autoFocus: true
+    }
+  ]
 
   const reqFilesList = useCallback( async () => {
     try {
@@ -53,22 +72,10 @@ export const Installing = () => {
     }
   }, [ language, installationPath, nav ]);
 
-  const mainFolderChecker = useCallback(
-    async (): Promise<boolean> => {
-      try {
-        await readDir( installationPath );
-        return true
-      } catch ( err: unknown ) {
-        return false;
-      }
-    },
-    [ installationPath ],
-  );
-
   const initInstallation = useCallback(
     async () => {
       try {
-        const existsMainFolder = await mainFolderChecker();
+        const existsMainFolder = await mainFolderChecker( installationPath );
         if ( !existsMainFolder ) {
           await createDir( installationPath );
           reqFilesList();
@@ -80,7 +87,7 @@ export const Installing = () => {
         console.log(err);
       }
     },
-    [ installationPath, mainFolderChecker, reqFilesList, enqueueSnackbar, t ],
+    [ installationPath, reqFilesList, enqueueSnackbar, t ],
   );
 
   const handleCloseDialogMainFolder = async ( option: TOptionMainFolder ) => {
@@ -106,15 +113,6 @@ export const Installing = () => {
       case 'cancel':
         nav('/result', { replace: true, state: { type: 'cancelled' }});
         break;
-    }
-  }
-
-  const handleCloseDialogRelaunch = async ( option: TOptionRelaunch ) => {
-    setDialogRelaunchDisplay(false);
-    if ( option === 'reinit') {
-      await relaunch()
-    } else {
-      nav('/result', { replace: true, state: { type: 'cancelled' }});
     }
   }
 
@@ -157,10 +155,18 @@ export const Installing = () => {
         response={handleCloseDialogMainFolder}
       />
 
-      <DialogRelaunch
+      <ConfirmationDialog
+        type="error"
+        title={t('installing.dialogs.relaunch.title')}
         display={dialogRelaunchDisplay}
-        response={handleCloseDialogRelaunch}
-      />
+        onClose={ () => setDialogRelaunchDisplay(false) }
+        buttons={dialogRelaunchButtons}
+      >
+        { t('installing.dialogs.relaunch.description') }
+        <Box component="strong" display="block" mt={1}>
+          { t('installing.dialogs.relaunch.question') }
+        </Box>
+      </ConfirmationDialog>
     </>
   )
 }

@@ -26,10 +26,10 @@
     "typescript": "^4.6.3"
   },
   "scripts": {
-    "start": "cross-env BROWSER=none react-scripts start",
-    "build": "react-scripts build",
-    "test": "react-scripts test",
-    "eject": "react-scripts eject",
+    "start": "cross-env BROWSER=none craco start",
+    "build": "craco build",
+    "test": "craco test",
+    "eject": "craco eject",
     "tauri": "tauri"
   },
   "eslintConfig": {
@@ -51,6 +51,7 @@
     ]
   },
   "devDependencies": {
+    "@craco/craco": "^6.4.3",
     "@tauri-apps/cli": "^1.0.0-rc.8",
     "cross-env": "^7.0.3"
   }

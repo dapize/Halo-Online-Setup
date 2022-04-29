@@ -21,7 +21,7 @@ export const Nav: FC<INav> = ({ active, items, changedTo }) => {
       })
     }, 4500);
     currentInit.current = tOut;
-  }, [ changedTo ] );
+  }, [ changedTo, items ] );
 
   const handleOnClickItem = ( index: number ) => {
     if ( currentActive !== index ) {

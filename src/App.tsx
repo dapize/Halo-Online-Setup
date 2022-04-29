@@ -6,7 +6,7 @@ import { Result } from './pages/Result';
 function App() {
   return (
     <Routes>
-      <Route path="/" element={<Welcome />} />
+      <Route path="/" element={<Result />} />
       <Route path="installing" element={<Installing />} />
       <Route path="result" element={<Result />} />
     </Routes>

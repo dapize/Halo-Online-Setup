@@ -1,4 +1,4 @@
-import { writeFile,  removeFile, createDir } from '@tauri-apps/api/fs';
+import { writeFile, createDir } from '@tauri-apps/api/fs';
 import { tempdir } from '@tauri-apps/api/os';
 import { dataDir, desktopDir, dirname, join } from '@tauri-apps/api/path';
 import { Command } from '@tauri-apps/api/shell';
