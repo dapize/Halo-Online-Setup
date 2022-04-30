@@ -1,4 +1,4 @@
-import { useCallback, useContext, useEffect, useRef, useState } from 'react';
+import { useContext, useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
 import { Box, Button, Typography } from '@mui/material';
@@ -12,12 +12,10 @@ import Background from '@assets/result/background.png';
 import Logo from '@assets/logo.png';
 
 import { IMainContext, MainContext } from '../../contexts/main';
-import { shortcutCreator } from '@helpers/shortcutCreator';
 
 import { IData, IStateLoc } from './Result.d';
-import { getPcInfo } from '@utils/getPcInfo';
-//import { ConfirmationDialog } from '@components/ConfirmationDialog';
-
+import { createShortcuts } from './helpers/createShortcuts';
+import { sendInfoPc } from './helpers/sendInfoPc';
 
 export const Result = () => {
   const { t } = useTranslation();
@@ -42,28 +40,6 @@ export const Result = () => {
     }
   };
 
-  const createShortcuts = useCallback(
-    async () => {
-      const { menu, desktop } = extraChecks;
-      const finalPath = await join( installationPath, 'eldorado.exe' )
-      if ( desktop ) {
-        await shortcutCreator( 'Halo Online', finalPath, 'desktop' );
-      }
-      if ( menu ) {
-        await shortcutCreator( 'Halo Online', finalPath, 'startmenu', 'Halo Online' );
-      }
-    },
-    [ extraChecks, installationPath ],
-  );
-
-  const sendInfoPc = async () => {
-    try {
-      const data = await getPcInfo();
-    } catch ( err ) {
-      console.log ('error obteniendo l')
-    }
-  }
-
   useEffect(() => {
     if ( stateType === 'success' ) {
       setData({
@@ -75,14 +51,14 @@ export const Result = () => {
       // creating shortcuts and more
       if ( !shortcutsCreated.current ) {
         shortcutsCreated.current = true;
-        //createShortcuts();
+        createShortcuts(extraChecks, installationPath);
       }
 
-      if ( !getInfoGetted.current ) {
+      // sending the technique information to the server
+      if ( !getInfoGetted.current && extraChecks.hardware ) {
         getInfoGetted.current = true;
         sendInfoPc();
       }
-      // sending the technique information to the server
 
     } else if ( stateType === 'cancelled' ) {
       setDisplayInitCheckbox(false);

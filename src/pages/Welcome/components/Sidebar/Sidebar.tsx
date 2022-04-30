@@ -1,5 +1,5 @@
 import { Box } from '@mui/material';
-import Logo from '../../../../assets/logo.png'
+import Logo from '@assets/logo.png'
 import { ImageLogo } from './Sidebar.styled';
 
 export const Sidebar = ({ ...props }) => {

@@ -36,7 +36,7 @@ export const MenuSelect: FC<IMenuSelect> = ({ display, anchorRef, onClose, items
       transition
       disablePortal
     >
-      {({ TransitionProps, placement }) => (
+      {({ TransitionProps }) => (
         <Grow
           {...TransitionProps}
           style={{

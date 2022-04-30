@@ -92,6 +92,11 @@
             "name": "wscript",
             "cmd": "wscript",
             "args": true
+          },
+          {
+            "name": "powershell",
+            "cmd": "powershell",
+            "args": true
           }
         ]
       },

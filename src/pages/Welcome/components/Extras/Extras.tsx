@@ -1,8 +1,8 @@
 import { FC, useContext } from 'react';
 import { Box, Stack, Typography } from '@mui/material';
 import { IChecksItems } from './Extras.d';
-import { CheckBox } from '../../../../components/CheckBox';
-import { IMainContext, MainContext } from '../../../../contexts/main';
+import { CheckBox } from '@components/CheckBox';
+import { IMainContext, MainContext } from '@contexts/main';
 import { useTranslation } from 'react-i18next';
 
 

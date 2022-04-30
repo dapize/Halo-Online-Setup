@@ -3,7 +3,7 @@ import i18n from 'i18next';
 import { IconChevronDown, IconChevronUp } from '@tabler/icons';
 import { MenuSelect, IMenuSelectItem } from '../MenuSelect';
 import { Box, IconButton, Typography } from '@mui/material';
-import { IMainContext, MainContext } from '../../../../contexts/main';
+import { IMainContext, MainContext } from '@contexts/main';
 import { TLanguage } from './Language.d';
 import { useTranslation } from 'react-i18next';
 

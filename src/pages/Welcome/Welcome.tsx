@@ -2,7 +2,7 @@ import { Sidebar } from './components/Sidebar';
 import { Body } from './components/Body';
 import { Footer } from './components/Footer';
 import { Box } from '@mui/material';
-import Background from '../../assets/welcome/background.png'
+import Background from '@assets/welcome/background.png'
 
 export const Welcome = () => {
   return (

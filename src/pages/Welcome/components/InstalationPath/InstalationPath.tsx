@@ -2,9 +2,9 @@ import { FC, useContext, useEffect } from 'react';
 import { Box, IconButton, Typography } from '@mui/material';
 import { IconFolder } from '@tabler/icons';
 import { dataDir } from '@tauri-apps/api/path';
-import { IMainContext, MainContext } from '../../../../contexts/main';
+import { IMainContext, MainContext } from '@contexts/main';
 import { useTranslation } from 'react-i18next';
-import { chooseInstallationPath, getFullPath } from '../../../../helpers/chooseInstallationPath';
+import { chooseInstallationPath, getFullPath } from '@helpers/chooseInstallationPath';
 
 export const InstalationPath: FC = () => {
   const { installationPath, setInstallationPath } = useContext(MainContext) as IMainContext;
