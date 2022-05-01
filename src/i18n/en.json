@@ -25,7 +25,8 @@
     },
     "footer": {
       "installButton": "Start installation",
-      "requiredSpace": "Are required"
+      "requiredSpace": "Are required",
+      "withoutSpace": "There is not enough space in the current installation path, choose other."
     }
   },
   "installing": {

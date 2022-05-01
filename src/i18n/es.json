@@ -25,7 +25,8 @@
     },
     "footer": {
       "installButton": "Iniciar instalación",
-      "requiredSpace": "Se requieren"
+      "requiredSpace": "Se requieren",
+      "withoutSpace": "No hay espacio suficiente en la ruta de instalación actual, elige otra."
     }
   },
   "installing": {

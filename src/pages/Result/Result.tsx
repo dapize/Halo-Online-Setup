@@ -68,7 +68,7 @@ export const Result = () => {
         finishButton: t('result.finishButton.cancelled'),
       })
     }
-  }, [ stateType, t ])
+  }, [ stateType, t, extraChecks, installationPath ])
 
   return (
     <>

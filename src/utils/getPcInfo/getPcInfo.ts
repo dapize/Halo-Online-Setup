@@ -1,6 +1,7 @@
 import { arch, platform, type, version } from "@tauri-apps/api/os"
 import { Command } from "@tauri-apps/api/shell";
 import { primaryMonitor } from "@tauri-apps/api/window";
+
 import { IDisk, IMonitor } from './getPcInfo.d';
 
 const getTotalRam = (): Promise<number> => {
@@ -27,7 +28,7 @@ const arrDisksBuilder = ( lines: string[] ): IDisk[] => {
     .map( ( column: string ) => column.split(' ').filter(( item: string ) => item ) )
     .map( disk => {
       return {
-        label: disk[0].substring(-1),
+        letter: disk[0].substring(-1, 1),
         type: Number(disk[1]),
         size: Number(disk[2]),
         free: Number(disk[3]),
@@ -50,6 +51,12 @@ const getDisksInfo = (): Promise<IDisk[]> => {
     })
     command.spawn();
   })
+}
+
+const getFreeDiskSpace = async ( letter: string ): Promise<number | null> => {
+  const listDisk = await getDisksInfo();
+  const disk = listDisk.find( ( item: IDisk ) => item.letter.toLowerCase() === letter.toLowerCase());
+  return disk ? disk.free : null
 }
 
 const getMonitor = async (): Promise<null| IMonitor> => {
@@ -85,5 +92,6 @@ const getPcInfo = async () => {
 
 export {
   getPcInfo,
-  getDisksInfo
+  getDisksInfo,
+  getFreeDiskSpace
 }

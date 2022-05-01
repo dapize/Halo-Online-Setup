@@ -1,5 +1,5 @@
 export interface IDisk {
-  label: string;
+  letter: string;
   type: number;
   size: number;
   free: number;
