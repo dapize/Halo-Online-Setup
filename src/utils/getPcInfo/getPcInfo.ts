@@ -2,7 +2,7 @@ import { arch, platform, type, version } from "@tauri-apps/api/os"
 import { Command } from "@tauri-apps/api/shell";
 import { primaryMonitor } from "@tauri-apps/api/window";
 
-import { IDisk, IMonitor, IVideoCard } from './getPcInfo.d';
+import { IDisk, IGetPcInfo, IMonitor, IVideoCard } from './getPcInfo.d';
 
 const getTotalRam = (): Promise<number> => {
   return new Promise( (resolve, reject ) => {
@@ -98,7 +98,7 @@ const getVideoCard = (): Promise<IVideoCard> => {
   })
 }
 
-const getPcInfo = async () => {
+const getPcInfo = async (): Promise<IGetPcInfo> => {
   const cpuArc = await arch();
   const os = await platform();
   const osType = await type();

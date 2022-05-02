@@ -15,3 +15,14 @@ export interface IVideoCard {
   vram: number;
   name: string;
 }
+
+export interface IGetPcInfo {
+  arc: string;
+  disks: IDisk[];
+  monitor: IMonitor | null;
+  os: string;
+  osType: string;
+  osVersion: string;
+  ram: number;
+  video: IVideoCard;
+}

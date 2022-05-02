@@ -20,6 +20,14 @@
           "menu": "Create shortcut in start menu",
           "desktop": "Create desktop shortcut",
           "hardware": "Share hardware specifications"
+        },
+        "infoPc": {
+          "link": "what data will be sent?",
+          "dialog": {
+            "title": "PC information",
+            "description": "The next information will be collected specifically for the purposes of improving the game and derivatives:",
+            "button": "Okay"
+          }
         }
       }
     },
