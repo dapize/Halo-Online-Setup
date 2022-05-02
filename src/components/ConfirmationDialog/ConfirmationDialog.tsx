@@ -36,7 +36,7 @@ export const ConfirmationDialog: FC<IConfirmationDialog> = ( { type, title, disp
             { title }
           </Typography>
 
-          <Typography variant="body1" fontSize={14.5}>
+          <Typography variant="body1" fontSize={14.5} component="div">
             { children }
           </Typography>
         </div>

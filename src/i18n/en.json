@@ -26,6 +26,7 @@
           "dialog": {
             "title": "PC information",
             "description": "The next information will be collected specifically for the purposes of improving the game and derivatives:",
+            "loading": "Loading...",
             "button": "Okay"
           }
         }

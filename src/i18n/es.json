@@ -26,6 +26,7 @@
           "dialog": {
             "title": "Información de la PC",
             "description": "La siguiente información se recopilará específicamente con fines de mejorar el juego y derivados:",
+            "loading": "Cargando...",
             "button": "De acuerdo"
           }
         }

@@ -17,6 +17,7 @@ export interface IVideoCard {
 }
 
 export interface IGetPcInfo {
+  cpu: string;
   arc: string;
   disks: IDisk[];
   monitor: IMonitor | null;

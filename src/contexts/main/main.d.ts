@@ -1,6 +1,7 @@
 import { Dispatch, SetStateAction } from "react";
-import { TLanguage } from './../../pages/Welcome/components/Language/Language.d';
-import { IChecksItems } from "../../pages/Welcome/components/Extras";
+import { TLanguage } from '@pages/Welcome/components/Language';
+import { IChecksItems } from "@pages/Welcome/components/Extras";
+import { IGetPcInfo } from "@utils/getPcInfo";
 
 export interface IMainContext {
   installationPath: string;
@@ -9,4 +10,6 @@ export interface IMainContext {
   setLanguage: Dispatch<SetStateAction<TLanguage>>;
   extraChecks: IChecksItems;
   setExtraChecks: Dispatch<SetStateAction<IChecksItems>>;
+  pcInfo: IGetPcInfo | undefined;
+  setPcInfo: Dispatch<SetStateAction<IGetPcInfo|undefined>>;
 }

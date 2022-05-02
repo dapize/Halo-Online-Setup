@@ -3,3 +3,7 @@ export interface IChecksItems {
   desktop: boolean;
   hardware: boolean;
 }
+
+export interface IExtras {
+  onClickDialogOpen: () => void;
+}

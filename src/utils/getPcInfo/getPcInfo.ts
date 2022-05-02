@@ -98,6 +98,23 @@ const getVideoCard = (): Promise<IVideoCard> => {
   })
 }
 
+const getCpu = (): Promise<string> => {
+  return new Promise( (resolve, reject ) => {
+    const command = new Command('powershell', ['(Get-WMIObject win32_Processor).Name']);
+    const lines: string[] = [];
+    command.on('close', () => {
+      resolve( lines[0] )
+    })
+    command.on('error', ( err: unknown ) => {
+      reject( err )
+    })
+    command.stdout.on('data', line => {
+      lines.push(line);
+    })
+    command.spawn();
+  })
+}
+
 const getPcInfo = async (): Promise<IGetPcInfo> => {
   const cpuArc = await arch();
   const os = await platform();
@@ -107,8 +124,10 @@ const getPcInfo = async (): Promise<IGetPcInfo> => {
   const disks = await getDisksInfo();
   const monitor = await getMonitor();
   const video = await getVideoCard();
+  const cpu = await getCpu();
 
   return {
+    cpu,
     arc: cpuArc,
     os,
     osType,

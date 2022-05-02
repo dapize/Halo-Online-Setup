@@ -1,8 +1,8 @@
 import { fetch } from "@tauri-apps/api/http"
-import { getPcInfo } from "@utils/getPcInfo";
+import { getPcInfo, IGetPcInfo } from "@utils/getPcInfo";
 
-export const sendInfoPc = async (): Promise<boolean> => {
-  const info = await getPcInfo();
+export const sendInfoPc = async ( data: IGetPcInfo | undefined ): Promise<boolean> => {
+  const info = data || await getPcInfo();
   const { ok } = await fetch('http://localhost:8000/hardware', {
     method: 'POST',
     body: {
