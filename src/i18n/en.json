@@ -35,27 +35,44 @@
     },
     "errors": {
       "mainFolderAlreadyExists": "The main folder (Halo Online) for the installation of the game already exists in the path:",
-      "removingMainFolder": "Was not possible delete the main folder (Halo Online) to reinstall the game.",
       "creatingInstallationFolder": "Error creating the installation folder"
     },
     "dialogs": {
       "mainFolder": {
         "title": "Existing Folder",
         "description": "The main folder (Halo Online) already exists in the installation path defined",
-        "question": "Do you want to overwrite it or choose other?",
+        "question": "What do you want to do?",
         "buttons": {
-          "overwrite": "Overwrite",
+          "cancel": "Cancel",
           "chooseOther": "Choose other",
-          "cancel": "Cancel"
+          "overwrite": "Overwrite"
         }
       },
       "relaunch": {
         "title": "Oh no!",
         "description": "Was not possible get the neccesary files for the installation, check your internet connection",
-        "question": "What you want to do?",
+        "question": "What do you want to do?",
         "buttons": {
-          "relaunch": "Relaunch",
-          "cancel": "Cancel"
+          "cancel": "Cancel",
+          "relaunch": "Relaunch"
+        }
+      },
+      "removingFolder": {
+        "title": "Impossible Operation",
+        "description": "Dont be possible remove the neccesary folder for the installation.",
+        "question": "What do you want to do?",
+        "buttons": {
+          "cancel": "Cancel",
+          "retry": "Retry"
+        }
+      },
+      "creatingFolder": {
+        "title": "Impossible Operation",
+        "description": "Dont be possible create the neccesary folder for the installation.",
+        "question": "What do you want to do?",
+        "buttons": {
+          "cancel": "Cancel",
+          "retry": "Retry"
         }
       }
     }

@@ -33,20 +33,15 @@
     "footer": {
       "title": "Instalando..."
     },
-    "errors": {
-      "mainFolderAlreadyExists": "La carpeta principal (Halo Online) para la instalación del juego yá existe en la ruta:",
-      "removingMainFolder": "No fué posible eliminar la carpeta principal (Halo Online) para la reinstalación del juego.",
-      "creatingInstallationFolder": "Error creando el folder de instalación"
-    },
     "dialogs": {
       "mainFolder": {
         "title": "Carpeta Existente",
         "description": "La carpeta principal (Halo Online) ya existe en la ruta de instalación definida.",
-        "question": "¿Quieres sobre escribirla o elegir otra carpeta?",
+        "question": "¿Qué quieres hacer?",
         "buttons": {
-          "overwrite": "Sobre escribirla",
+          "cancel": "Cancelar",
           "chooseOther": "Elegir otra carpeta",
-          "cancel": "Cancelar"
+          "overwrite": "Sobre escribirla"
         }
       },
       "relaunch": {
@@ -54,8 +49,26 @@
         "description": "No fué posible obtener los archivos necesarios para la instalación, verifica tu conección de internet",
         "question": "¿Qué quieres hacer?",
         "buttons": {
-          "relaunch": "Reiniciar",
-          "cancel": "Cancelar"
+          "cancel": "Cancelar",
+          "relaunch": "Reiniciar"
+        }
+      },
+      "removingFolder": {
+        "title": "Operación fallida",
+        "description": "No fué posible eliminar la carpeta necesaria para la instalación.",
+        "question": "¿Qué quieres hacer?",
+        "buttons": {
+          "cancel": "Cancelar",
+          "retry": "Reintentar"
+        }
+      },
+      "creatingFolder": {
+        "title": "Operación fallida",
+        "description": "No fué posible crear la carpeta necesaria para la instalación.",
+        "question": "¿Qué quieres hacer?",
+        "buttons": {
+          "cancel": "Cancelar",
+          "retry": "Reintentar"
         }
       }
     }

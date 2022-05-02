@@ -1,4 +1,4 @@
-import { ButtonProps, SxProps } from '@mui/material';
+import { ButtonProps, DialogProps, SxProps } from '@mui/material';
 import { TablerIcon } from '@tabler/icons';
 import { ReactNode } from 'react';
 
@@ -21,6 +21,6 @@ export interface IConfirmationDialog {
   title: string;
   buttons: IButton[];
   display: boolean;
-  onClose: () => void;
+  onClose: DialogProps['onClose'];
   type: TDialog;
 }

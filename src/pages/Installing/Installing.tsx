@@ -1,6 +1,5 @@
 import { useCallback, useContext, useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { useSnackbar } from 'notistack';
 import { useTranslation } from 'react-i18next';
 import { Box, Typography } from '@mui/material'
 import { fetch, Response } from '@tauri-apps/api/http';
@@ -9,6 +8,7 @@ import { relaunch } from '@tauri-apps/api/process';
 
 import { Downloader } from '@helpers/Downloader';
 import { chooseInstallationPath } from '@helpers/chooseInstallationPath';
+import { existsFolder } from '@helpers/existsFolder';
 
 import { IMainContext, MainContext } from '@contexts/main';
 import { ConfirmationDialog, IButton } from '@components/ConfirmationDialog';
@@ -17,31 +17,39 @@ import { Gallery } from './components/Gallery'
 import { Nav } from './components/Nav';
 import { ProgressBar } from './components/ProgressBar';
 
-import { DialogMainFolder, TOption as TOptionMainFolder } from './components/DialogMainFolder';
-
 import { IResponse } from './Installing.d';
-import { mainFolderChecker } from './helpers/mainFolderChecker';
-
 
 export const Installing = () => {
   const { t } = useTranslation();
-  const { enqueueSnackbar } = useSnackbar();
   const nav = useNavigate();
+  const { installationPath, language, setInstallationPath } = useContext(MainContext) as IMainContext;
   const [ itemActive, setItemActive ] = useState<number>(0);
   const [ percentageProgress, setPercentageProgress ] = useState<number>(0);
-  const { installationPath, language, setInstallationPath } = useContext(MainContext) as IMainContext;
-  const uniqueReques = useRef<boolean>(false);
   const [dialogMainFolderDisplay, setDialogMainFolderDisplay] = useState<boolean>(false);
-  const chooseOtherFolder = useRef<boolean>(false);
-
+  const [dialogRemovingDisplay, setDialogRemovingDisplay] = useState<boolean>(false);
   const [dialogRelaunchDisplay, setDialogRelaunchDisplay] = useState<boolean>(false);
-  const dialogRelaunchButtons: IButton[] = [
+  const [dialogCreatingDisplay, setDialogCreatingDisplay] = useState<boolean>(false);
+  const chooseOtherFolder = useRef<boolean>(false);
+  const uniqueRequest = useRef<boolean>(false);
+  const urlToGetFiles = `http://localhost:8000/files?language=${language}`;
+
+  const cancelInstallation = useCallback(
+    () => {
+      nav('/result', { replace: true, state: { type: 'cancelled' }});
+    },
+    [ nav ],
+  );
+
+  const dialogCloserHandler = ( reason: string ) => {
+    if ( reason && reason === 'backdropClick' ) {
+      cancelInstallation()
+    }
+  }
+
+  const buttonsRelaunchDialog: IButton[] = [
     {
       label: t('installing.dialogs.relaunch.buttons.cancel'),
-      action: () => {
-        setDialogRelaunchDisplay(false);
-        nav('/result', { replace: true, state: { type: 'cancelled' }});
-      }
+      action: () => cancelInstallation()
     },
     {
       label: t('installing.dialogs.relaunch.buttons.relaunch'),
@@ -49,14 +57,14 @@ export const Installing = () => {
       variant: 'contained',
       autoFocus: true
     }
-  ]
+  ];
 
   const reqFilesList = useCallback( async () => {
     try {
-      const getFilesList: Response<IResponse> = await fetch(`http://localhost:8000/files?language=${language}`);
+      const getFilesList: Response<IResponse> = await fetch(urlToGetFiles);
       const getFiles = new Downloader( getFilesList.data.list, installationPath );
       getFiles.on('error', ( err: unknown ) => {
-        setDialogRelaunchDisplay(true)
+        setDialogRelaunchDisplay(true);
       });
       getFiles.on('finish', ( err: unknown ) => {
         if ( !err ) {
@@ -66,66 +74,109 @@ export const Installing = () => {
       getFiles.on('progress', ( percentage: number ) => {
         setPercentageProgress( percentage )
       });
-
     } catch ( err ) {
-      setDialogRelaunchDisplay(true)
+      setDialogRelaunchDisplay(true);
     }
-  }, [ language, installationPath, nav ]);
+  }, [ urlToGetFiles, installationPath, nav ]);
 
   const initInstallation = useCallback(
     async () => {
       try {
-        const existsMainFolder = await mainFolderChecker( installationPath );
-        if ( !existsMainFolder ) {
+        const existsMainFolder = await existsFolder( installationPath );
+        if ( existsMainFolder ) {
+          setDialogMainFolderDisplay(true)
+        } else {
           await createDir( installationPath );
           reqFilesList();
-        } else {
-          setDialogMainFolderDisplay( true );
         }
       } catch ( err ) {
-        enqueueSnackbar(t('installing.errors.creatingInstallationFolder'), { variant: 'error' });
-        console.log(err);
+        setDialogCreatingDisplay(true);
       }
     },
-    [ installationPath, reqFilesList, enqueueSnackbar, t ],
+    [ installationPath, reqFilesList ],
   );
 
-  const handleCloseDialogMainFolder = async ( option: TOptionMainFolder ) => {
-    setDialogMainFolderDisplay( false );
-    switch ( option ) {
-      case 'overwrite':
-        try {
-          await removeDir( installationPath, { recursive: true })
-        } catch ( err: unknown ) {
-          enqueueSnackbar(t('installing.errors.removingMainFolder'), { variant: 'error' });
-        }
-        initInstallation();
-        break;
-
-      case 'other':
-        const newInstallationPath = await chooseInstallationPath();
-        if ( newInstallationPath ) {
-          setInstallationPath( newInstallationPath );
-          chooseOtherFolder.current = true;
-        }
-        break;
-
-      case 'cancel':
-        nav('/result', { replace: true, state: { type: 'cancelled' }});
-        break;
+  const removeInstallationFolder = async () => {
+    try {
+      await removeDir( installationPath, { recursive: true });
+      initInstallation();
+    } catch ( err: unknown ) {
+      setDialogRemovingDisplay(true);
     }
   }
 
+  const buttonsRemovingDialog: IButton[] = [
+    {
+      label: t('installing.dialogs.removingFolder.buttons.cancel'),
+      action: () => cancelInstallation()
+    },
+    {
+      label: t('installing.dialogs.removingFolder.buttons.retry'),
+      action: async () => {
+        setDialogRemovingDisplay(false);
+        await removeInstallationFolder();
+      },
+      variant: 'contained',
+      autoFocus: true
+    }
+  ]
+
+  const buttonsCreatingDialog: IButton[] = [
+    {
+      label: t('installing.dialogs.creatingFolder.buttons.cancel'),
+      action: () => cancelInstallation()
+    },
+    {
+      label: t('installing.dialogs.creatingFolder.buttons.retry'),
+      action: async () => {
+        setDialogCreatingDisplay(false);
+        await initInstallation();
+      },
+      variant: 'contained',
+      autoFocus: true
+    }
+  ]
+
+  const buttonsMainFolderDialog: IButton[] = [
+    {
+      label: t('installing.dialogs.mainFolder.buttons.cancel'),
+      action: () => cancelInstallation(),
+      sx: {
+        mr: 'auto'
+      }
+    },
+    {
+      label: t('installing.dialogs.mainFolder.buttons.chooseOther'),
+      variant: 'outlined',
+      action: async () => {
+        const newInstallationPath = await chooseInstallationPath();
+        if ( newInstallationPath ) {
+          setDialogMainFolderDisplay(false);
+          chooseOtherFolder.current = true;
+          setInstallationPath( newInstallationPath );
+        }
+      }
+    },
+    {
+      label: t('installing.dialogs.mainFolder.buttons.overwrite'),
+      variant: 'contained',
+      action: () => {
+        setDialogMainFolderDisplay(false);
+        removeInstallationFolder();
+      }
+    }
+  ]
+
   useEffect(() => {
-    if ( uniqueReques.current && chooseOtherFolder.current) {
+    if ( uniqueRequest.current && chooseOtherFolder.current) {
       chooseOtherFolder.current = false;
       initInstallation();
     }
   }, [ installationPath, initInstallation ])
 
   useEffect(() => {
-    if ( !uniqueReques.current ) {
-      uniqueReques.current = true;
+    if ( !uniqueRequest.current ) {
+      uniqueRequest.current = true;
       initInstallation();
     };
   }, [ initInstallation ]);
@@ -150,21 +201,55 @@ export const Installing = () => {
         </Box>
       </Box>
 
-      <DialogMainFolder
-        display={dialogMainFolderDisplay}
-        response={handleCloseDialogMainFolder}
-      />
+      <ConfirmationDialog
+        type="info"
+        title={ t('installing.dialogs.mainFolder.title') }
+        display={ dialogMainFolderDisplay }
+        onClose={ ( event: object, reason: string ) => dialogCloserHandler(reason)}
+        buttons={buttonsMainFolderDialog}
+      >
+        { t('installing.dialogs.mainFolder.description') }
+        <Box component="strong" display="block" mt={1}>
+          { t('installing.dialogs.mainFolder.question') }
+        </Box>
+      </ConfirmationDialog>
+
+      <ConfirmationDialog
+        type="error"
+        title={ t('installing.dialogs.creatingFolder.title') }
+        display={ dialogCreatingDisplay }
+        onClose={ ( event: object, reason: string ) => dialogCloserHandler(reason)}
+        buttons={buttonsCreatingDialog}
+      >
+        { t('installing.dialogs.creatingFolder.description') }
+        <Box component="strong" display="block" mt={1}>
+          { t('installing.dialogs.creatingFolder.question') }
+        </Box>
+      </ConfirmationDialog>
 
       <ConfirmationDialog
         type="error"
         title={t('installing.dialogs.relaunch.title')}
-        display={dialogRelaunchDisplay}
-        onClose={ () => setDialogRelaunchDisplay(false) }
-        buttons={dialogRelaunchButtons}
+        display={ dialogRelaunchDisplay }
+        onClose={ ( event: object, reason: string ) => dialogCloserHandler(reason)}
+        buttons={buttonsRelaunchDialog}
       >
         { t('installing.dialogs.relaunch.description') }
         <Box component="strong" display="block" mt={1}>
           { t('installing.dialogs.relaunch.question') }
+        </Box>
+      </ConfirmationDialog>
+
+      <ConfirmationDialog
+        type="error"
+        title={ t('installing.dialogs.removingFolder.title') }
+        display={ dialogRemovingDisplay }
+        onClose={ ( event: object, reason: string ) => dialogCloserHandler(reason)}
+        buttons={buttonsRemovingDialog}
+      >
+        { t('installing.dialogs.removingFolder.description') }
+        <Box component="strong" display="block" mt={1}>
+          { t('installing.dialogs.removingFolder.question') }
         </Box>
       </ConfirmationDialog>
     </>

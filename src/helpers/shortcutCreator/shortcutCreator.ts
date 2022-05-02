@@ -1,4 +1,5 @@
-import { writeFile, createDir } from '@tauri-apps/api/fs';
+import { existsFolder } from '@helpers/existsFolder';
+import { writeFile, createDir, removeDir } from '@tauri-apps/api/fs';
 import { tempdir } from '@tauri-apps/api/os';
 import { dataDir, desktopDir, dirname, join } from '@tauri-apps/api/path';
 import { Command } from '@tauri-apps/api/shell';
@@ -40,6 +41,10 @@ export const shortcutCreator = async ( name: string, pathFile: string, type: TSh
     const folderProgram = folderName ? `\\${folderName}` : '';
     createShortcutIn = await join( dataPath, `Microsoft\\Windows\\Start Menu\\Programs${folderProgram}`);
     if ( folderName ) {
+      const existsFolderInMenu = await existsFolder( createShortcutIn )
+      if ( existsFolderInMenu ) {
+        await removeDir( createShortcutIn, { recursive: true } )
+      }
       await createDir( createShortcutIn )
     }
   }

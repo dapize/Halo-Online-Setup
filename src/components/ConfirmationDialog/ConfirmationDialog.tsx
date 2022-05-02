@@ -1,7 +1,7 @@
 import { FC, useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
-import { Box, Stack, Typography } from '@mui/material';
+import { Box, Typography } from '@mui/material';
 
 import { IButton, IConfirmationDialog } from './ConfirmationDialog.d';
 import { getDataByType } from './helpers/getDataByType';
@@ -22,7 +22,7 @@ export const ConfirmationDialog: FC<IConfirmationDialog> = ( { type, title, disp
       TransitionComponent={Transition}
       fullWidth={true}
       maxWidth="sm"
-      keepMounted
+      disableEscapeKeyDown
     >
       <Box height="8px" bgcolor={color}></Box>
 
@@ -32,29 +32,27 @@ export const ConfirmationDialog: FC<IConfirmationDialog> = ( { type, title, disp
         </Box>
 
         <div>
-          <Typography variant="h5" fontWeight="bold" mb={2}>
+          <Typography variant="h5" fontWeight={500} mb={1.2}>
             { title }
           </Typography>
 
-          <Typography variant="body1">
+          <Typography variant="body1" fontSize={14.5}>
             { children }
           </Typography>
         </div>
       </Box>
 
       <Box p="15px 16px" display="flex" justifyContent="flex-end" alignItems="center" sx={{ borderTop: '1px solid #d8d8d8'}}>
-        <Stack direction="row" spacing={2}>
-          {
-            buttons.map(( button: IButton ) => {
-              const { label, action, variant = 'text', sx = {}, autoFocus } = button;
-              return (
-                <Button onClick={ action } variant={ variant } sx={{ textTransform: 'capitalize', ...sx }} autoFocus={autoFocus}>
-                  { label }
-                </Button>
-              )
-            })
-          }
-        </Stack>
+        {
+          buttons.map(( button: IButton, index: number ) => {
+            const { label, action, variant = 'text', sx = {}, autoFocus } = button;
+            return (
+              <Button key={`${label}-${index}`} onClick={ action } variant={ variant } sx={{ ml: index ? 2 : 0, textTransform: 'capitalize', ...sx }} autoFocus={autoFocus}>
+                { label }
+              </Button>
+            )
+          })
+        }
       </Box>
     </Dialog>
   );

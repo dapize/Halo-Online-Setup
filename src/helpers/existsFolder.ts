@@ -1,6 +1,6 @@
 import { readDir } from "@tauri-apps/api/fs";
 
-export const mainFolderChecker = async ( installationPath: string ): Promise<boolean> => {
+export const existsFolder = async ( installationPath: string ): Promise<boolean> => {
   try {
     await readDir( installationPath );
     return true
