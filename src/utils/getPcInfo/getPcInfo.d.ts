@@ -10,3 +10,8 @@ export interface IMonitor {
   height: number;
   width: number;
 }
+
+export interface IVideoCard {
+  vram: number;
+  name: string;
+}

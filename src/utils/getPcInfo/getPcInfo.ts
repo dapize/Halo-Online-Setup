@@ -2,7 +2,7 @@ import { arch, platform, type, version } from "@tauri-apps/api/os"
 import { Command } from "@tauri-apps/api/shell";
 import { primaryMonitor } from "@tauri-apps/api/window";
 
-import { IDisk, IMonitor } from './getPcInfo.d';
+import { IDisk, IMonitor, IVideoCard } from './getPcInfo.d';
 
 const getTotalRam = (): Promise<number> => {
   return new Promise( (resolve, reject ) => {
@@ -70,6 +70,34 @@ const getMonitor = async (): Promise<null| IMonitor> => {
   }
 }
 
+const videoDataBuilder = ( lines: string[] ): IVideoCard => {
+  const oneLine = lines.filter( item => item ).slice(2);
+  const columns = oneLine[0].split(' ');
+  const vram = columns[0];
+  const name = columns.slice(1).join(' ');
+  return {
+    vram: (( Number(vram) / 1024) / 1024 ) / 1024,
+    name
+  }
+}
+
+const getVideoCard = (): Promise<IVideoCard> => {
+  return new Promise( (resolve, reject ) => {
+    const command = new Command('powershell', ['Get-WmiObject win32_VideoController | Format-Table AdapterRAM, Name']);
+    const lines: string[] = [];
+    command.on('close', () => {
+      resolve(videoDataBuilder(lines))
+    })
+    command.on('error', ( err: unknown ) => {
+      reject( err )
+    })
+    command.stdout.on('data', line => {
+      lines.push(line);
+    })
+    command.spawn();
+  })
+}
+
 const getPcInfo = async () => {
   const cpuArc = await arch();
   const os = await platform();
@@ -78,6 +106,7 @@ const getPcInfo = async () => {
   const ram = await getTotalRam();
   const disks = await getDisksInfo();
   const monitor = await getMonitor();
+  const video = await getVideoCard();
 
   return {
     arc: cpuArc,
@@ -86,7 +115,8 @@ const getPcInfo = async () => {
     osVersion,
     ram,
     disks,
-    monitor
+    monitor,
+    video
   }
 }
 
