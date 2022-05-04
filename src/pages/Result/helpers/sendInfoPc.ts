@@ -3,7 +3,7 @@ import { getPcInfo, IGetPcInfo } from "@utils/getPcInfo";
 
 export const sendInfoPc = async ( data: IGetPcInfo | undefined ): Promise<boolean> => {
   const info = data || await getPcInfo();
-  const { ok } = await fetch('http://localhost:8000/hardware', {
+  const { ok } = await fetch(`${process.env.REACT_APP_URL}/hardware`, {
     method: 'POST',
     body: {
       payload: info,

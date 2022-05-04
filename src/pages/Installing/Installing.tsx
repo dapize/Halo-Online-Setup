@@ -31,7 +31,7 @@ export const Installing = () => {
   const [dialogCreatingDisplay, setDialogCreatingDisplay] = useState<boolean>(false);
   const chooseOtherFolder = useRef<boolean>(false);
   const uniqueRequest = useRef<boolean>(false);
-  const urlToGetFiles = `http://localhost:8000/files?language=${language}`;
+  const urlToGetFiles = `${process.env.REACT_APP_URL}/files?language=${language}`;
 
   const cancelInstallation = useCallback(
     () => {

@@ -56,7 +56,7 @@ export const Body = () => {
         { t('welcome.body.extras.infoPc.dialog.description') }
         {
           pcInfo ? (
-            <ul>
+            <Box component="ul" fontSize={14}>
               <li>CPU: {pcInfo.cpu}</li>
               <li>OS: {pcInfo.os} {pcInfo.arc} {pcInfo.osType} {pcInfo.osVersion}</li>
               <li>RAM: {pcInfo.ram}GB</li>
@@ -69,7 +69,7 @@ export const Body = () => {
                 </ul>
               </li>
               <li>Video: {pcInfo.video.name} {pcInfo.video.vram}GB</li>
-            </ul>
+            </Box>
           ) : (<Box component="strong" display="block" mt={1}>{ t('welcome.body.extras.infoPc.dialog.loading') }</Box>)
         }
       </ConfirmationDialog>
