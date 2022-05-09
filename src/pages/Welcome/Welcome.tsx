@@ -17,7 +17,9 @@ export const Welcome = () => {
       }}
       component="main"
     >
-      <Sidebar flexShrink={0}/>
+      <Box width={273} flexShrink={0}>
+        <Sidebar/>
+      </Box>
       <Box width={673}>
         <Body />
         <Footer/>
