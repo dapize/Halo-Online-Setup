@@ -57,10 +57,14 @@ export const Body = () => {
         {
           pcInfo ? (
             <Box component="ul" fontSize={14}>
-              <li>CPU: {pcInfo.cpu}</li>
-              <li>OS: {pcInfo.os} {pcInfo.arc} {pcInfo.osType} {pcInfo.osVersion}</li>
+              <li>CPU: {pcInfo.cpu} - {pcInfo.arc}</li>
+              <li>OS Version: {pcInfo.osVersion}</li>
               <li>RAM: {pcInfo.ram}GB</li>
-              <li>Monitor: {pcInfo.monitor?.width} x {pcInfo.monitor?.height} - {pcInfo.monitor?.scaleFactor}</li>
+              {
+                !!pcInfo.monitor && (
+                  <li>Monitor: {pcInfo.monitor.width} x {pcInfo.monitor.height} - {pcInfo.monitor.scaleFactor}</li>
+                )
+              }
               <li>Disk:
                 <ul>
                   {pcInfo.disks.map(( item: IDisk, index: number ) => (

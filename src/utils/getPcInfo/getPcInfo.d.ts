@@ -20,9 +20,7 @@ export interface IGetPcInfo {
   cpu: string;
   arc: string;
   disks: IDisk[];
-  monitor: IMonitor | null;
-  os: string;
-  osType: string;
+  monitor?: IMonitor;
   osVersion: string;
   ram: number;
   video: IVideoCard;

@@ -1,4 +1,4 @@
-import { arch, platform, type, version } from "@tauri-apps/api/os"
+import { arch, version } from "@tauri-apps/api/os"
 import { Command } from "@tauri-apps/api/shell";
 import { primaryMonitor } from "@tauri-apps/api/window";
 
@@ -117,8 +117,6 @@ const getCpu = (): Promise<string> => {
 
 const getPcInfo = async (): Promise<IGetPcInfo> => {
   const cpuArc = await arch();
-  const os = await platform();
-  const osType = await type();
   const osVersion = await version();
   const ram = await getTotalRam();
   const disks = await getDisksInfo();
@@ -126,17 +124,17 @@ const getPcInfo = async (): Promise<IGetPcInfo> => {
   const video = await getVideoCard();
   const cpu = await getCpu();
 
-  return {
+  const resObj: IGetPcInfo = {
     cpu,
     arc: cpuArc,
-    os,
-    osType,
     osVersion,
     ram,
     disks,
-    monitor,
     video
   }
+
+  if ( monitor ) resObj.monitor = monitor;
+  return resObj
 }
 
 export {
