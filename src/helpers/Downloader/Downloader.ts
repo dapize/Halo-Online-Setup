@@ -19,7 +19,10 @@ export class Downloader {
   constructor( urlOrUrls: IFile | IFile[], installationPath: string ) {
     this.urls = !Array.isArray( urlOrUrls ) ? [ urlOrUrls ] : urlOrUrls;
     this.installationFolder = installationPath;
-    this.processor( [ ...this.urls ] )
+    const urls = [ ...this.urls ];
+    this.processor( urls );
+    this.processor( urls );
+    this.processor( urls );
   }
 
   private async processor ( arr: IFile[] ) {

@@ -63,7 +63,7 @@ export const Installing = () => {
     try {
       const getFilesList: Response<IResponse> = await fetch(urlToGetFiles);
       const getFiles = new Downloader( getFilesList.data.list, installationPath );
-      getFiles.on('error', ( err: unknown ) => {
+      getFiles.on('error', () => {
         setDialogRelaunchDisplay(true);
       });
       getFiles.on('finish', ( err: unknown ) => {
